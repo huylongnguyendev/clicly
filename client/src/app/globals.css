@@ -116,8 +116,15 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
-    @apply bg-background text-foreground ;
+    @apply bg-background text-foreground;
     font-family: var(--font-quick-sand);
   }
+}
+
+.gradient-bg {
+  background: radial-gradient(125% 125% at 50% 10%,
+      var(--background) 50%,
+      oklch(44.284% 0.24506 263.772) 100%)
 }

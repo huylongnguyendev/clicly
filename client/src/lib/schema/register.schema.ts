@@ -1,4 +1,5 @@
 import z from "zod"
+import { Role } from "../types/user.type"
 
 export const RegisterSchema = z
   .object({
@@ -11,7 +12,9 @@ export const RegisterSchema = z
         message: "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt"
       }),
 
-    confirm: z.string()
+    confirm: z.string(),
+
+    role: z.enum(Role)
   })
   .refine(val => val.confirm === val.password, {
     message: "Xác nhận mật khẩu không khớp",

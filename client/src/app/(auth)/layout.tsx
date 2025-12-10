@@ -11,7 +11,8 @@ export default function AuthLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="relative w-full h-dvh px-4">
+    <div className="relative w-full h-dvh px-4 z-10">
+      <div className="absolute inset-0 -z-10 gradient-bg"/>
       {children}
     </div>
   )
