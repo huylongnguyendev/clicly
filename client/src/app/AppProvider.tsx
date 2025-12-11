@@ -3,7 +3,7 @@ import { ThemeProvider } from "@/lib/providers/ThemeProvider"
 
 export default function AppProvider({ children }: { children: React.ReactNode }) {
   return (
-    // <StoreProvider>
+    <StoreProvider>
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
@@ -12,6 +12,6 @@ export default function AppProvider({ children }: { children: React.ReactNode })
       >
         {children}
       </ThemeProvider>
-    // </StoreProvider>
+    </StoreProvider>
   )
 }

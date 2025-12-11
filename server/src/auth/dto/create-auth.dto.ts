@@ -5,6 +5,14 @@ import sanitizeHtml from "sanitize-html"
 
 export class CreateAuthDto {
   @IsNotEmpty()
+  @IsString()
+  @Transform((val) => sanitizeHtml(val, {
+    allowedTags: [],
+    allowedAttributes: {}
+  }) as string)
+  fullName!: string
+
+  @IsNotEmpty()
   @IsPhoneNumber("VN", { message: "Số điện thoại không hợp lệ" })
   phone!: string
 

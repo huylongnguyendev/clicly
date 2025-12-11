@@ -1,8 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit"
+import loginReducer from "./slices/login.slice"
+import toggleReducer from "./slices/toggle.slice"
 
 export const createStore = () => {
   return configureStore({
-    reducer: {}
+    reducer: {
+      login: loginReducer,
+      toggle: toggleReducer
+    }
   })
 }
 

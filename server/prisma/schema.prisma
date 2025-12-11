@@ -13,16 +13,25 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(uuid())
+  id       String  @id @default(uuid())
   fullName String?
-  phone    String   @unique
+  phone    String  @unique
   password String
-  status   Boolean  @default(false)
-  role     Role
-  session  Session?
+  status   Boolean @default(false)
+  address  String?
+  email    String?
+
+  role    Role
+  session Session?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([fullName])
+  @@index([phone])
+  @@index([email])
+  @@index([status])
+  @@index([role])
 }
 
 enum Role {

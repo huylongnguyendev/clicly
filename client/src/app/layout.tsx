@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { Pacifico, Quicksand } from "next/font/google"
 import "./globals.css"
 import AppProvider from "./AppProvider"
-import { ModeToggle } from "@/components/toggle/ModeToggle"
 import { Toaster } from "sonner"
 
 const pacificoLogo = Pacifico({
@@ -33,7 +32,6 @@ export default function RootLayout({
       >
         <AppProvider>
           {children}
-          <ModeToggle />
           <Toaster richColors/>
         </AppProvider>
       </body>

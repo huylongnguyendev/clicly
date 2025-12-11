@@ -1,20 +1,20 @@
 "use client"
-
-import ConfirmField from "@/components/fields/ConfirmField"
-import PasswordField from "@/components/fields/PasswordField"
-import PhoneField from "@/components/fields/PhoneField"
-import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
-import { Spinner } from "@/components/ui/spinner"
-import { RegisterSchema } from "@/lib/schema/register.schema"
 import { RegisterFormType, RegisterType } from "@/lib/types/form.type"
-import { Role } from "@/lib/types/user.type"
-import { FormParser } from "@/middleware/form.middleware"
-import { authService } from "@/services/auth.service"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { RegisterSchema } from "@/lib/schema/register.schema"
+import { Role } from "@/lib/types/user.type"
+import { motion } from "framer-motion"
+import PhoneField from "@/components/fields/PhoneField"
+import PasswordField from "@/components/fields/PasswordField"
+import ConfirmField from "@/components/fields/ConfirmField"
+import { Button } from "@/components/ui/button"
+import InputField from "@/components/fields/InputField"
+import { authService } from "@/services/auth.service"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
+import { Spinner } from "@/components/ui/spinner"
 
 export default function FormRegister() {
   const router = useRouter()
@@ -22,6 +22,7 @@ export default function FormRegister() {
   const form = useForm<RegisterFormType>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
+      fullName: "",
       phone: "",
       password: "",
       confirm: "",
@@ -30,38 +31,53 @@ export default function FormRegister() {
   })
 
   const onSubmit = async (data: RegisterFormType) => {
-    const payload: RegisterType = FormParser.register(data)
-
+    const { phone, password, role, fullName } = data
+    const payload: RegisterType = { phone, password, role, fullName }
+    
     try {
       const res = await authService.register(payload)
       toast.success(res.message)
-      router.push("login")
+      router.push("/login")
     } catch (error: any) {
       if (error.response)
-        toast.error(error.response.data?.message ?? "Đăng nhập thất bại")
+        toast.error(error.response.data.message)
       else
-        toast.error(error.message ?? "Không thể kết nối, vui lòng kiểm tra lại internet")
+        toast.error(error.message ?? "Lỗi kết nối! Vui lòng kiểm tra lại")
     }
   }
 
   return (
     <>
-      <Form {...form} >
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
+      <Form {...form}>
+        <motion.form
+          initial={{ opacity: 0, y: 10 }}
+          transition={{ duration: 0.6 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
           className="space-y-10"
+          onSubmit={form.handleSubmit(onSubmit)}
         >
+          <InputField
+            label="Họ tên"
+            placeholder="Họ và tên của bạn"
+            name="fullName"
+          />
           <PhoneField />
-          <PasswordField placeholder="Tạo mật khẩu mới" />
+          <PasswordField placeholder="Tạo mật khẩu mới"/>
           <ConfirmField />
-          <p className="text-accent-foreground text-xs font-semibold">Bằng cách nhấn Đăng ký, bạn đồng ý với các Chính sách bảo mật và Điều khoản của chúng tôi</p>
-          <Button
-            className="w-full"
-            disabled={form.formState.isSubmitting}
-          >
-            {form.formState.isSubmitting && <Spinner /> || "Đăng ký"}
-          </Button>
-        </form>
+          <div className="space-y-4">
+            <p className="text-xs text-accent-foreground">
+              Bằng cách nhấn nút Đăng ký, bạn đông ý với các Chính sách bảo mật và Điều khoản của chúng tôi
+            </p>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? <Spinner /> : "Đăng ký"}
+            </Button>
+          </div>
+        </motion.form>
       </Form>
     </>
   )

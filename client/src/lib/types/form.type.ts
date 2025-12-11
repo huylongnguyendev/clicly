@@ -1,11 +1,9 @@
 import z from "zod"
 import { RegisterSchema } from "../schema/register.schema"
-import { Role } from "./user.type"
+import { LoginSchema } from "../schema/login.schema"
 
 export type RegisterFormType = z.infer<typeof RegisterSchema>
+export type LoginFormType = z.infer<typeof LoginSchema>
 
-export type RegisterType = {
-  phone: string
-  password: string
-  role: Role
-}
+export type RegisterType = Omit<RegisterFormType, "confirm">
+export type LoginType = LoginFormType
